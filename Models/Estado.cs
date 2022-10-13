@@ -8,5 +8,7 @@ namespace AppEstados.Models
 
         [Required]
         public string? Nombre { get; set; }
+
+        //public ICollection<Municipio>? Municipios { get; set; }
     }
 }

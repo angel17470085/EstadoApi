@@ -8,7 +8,7 @@ namespace AppEstados.DTOs
 
 
         [Required]
-        public string? Name { get; set; }
+        public string? Nombre { get; set; }
 
     }
 }

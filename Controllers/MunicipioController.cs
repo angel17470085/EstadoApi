@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AppEstados.Data;
 using AppEstados.Models;
+using AppEstados.DTOs;
 
 namespace AppEstados.Controllers
 {
@@ -23,14 +24,14 @@ namespace AppEstados.Controllers
 
         // GET: api/Municipio
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Municipio>>> GetMunicipios()
+        public async Task<ActionResult<IEnumerable<MunicipioDto>>> GetMunicipios()
         {
-            return await _context.Municipios.ToListAsync();
+            return await _context.Municipios.Select(x=> MunicipioAdto(x)).ToListAsync();
         }
 
         // GET: api/Municipio/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Municipio>> GetMunicipio(int id)
+        public async Task<ActionResult<MunicipioDto>> GetMunicipio(int id)
         {
             var municipio = await _context.Municipios.FindAsync(id);
 
@@ -38,36 +39,37 @@ namespace AppEstados.Controllers
             {
                 return NotFound();
             }
-
-            return municipio;
+            var municipioDto = MunicipioAdto(municipio);
+            return municipioDto;
         }
 
         // PUT: api/Municipio/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMunicipio(int id, Municipio municipio)
+        public async Task<IActionResult> PutMunicipio(int id, MunicipioDto municipioDto)
         {
-            if (id != municipio.Id)
+            if (id != municipioDto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(municipio).State = EntityState.Modified;
+            var municipioAmodificar = await _context.Municipios.FindAsync(id);
+           
+
+            if (municipioAmodificar == null)
+            {
+                return NotFound();
+            }
+
+            municipioAmodificar.Nombre = municipioDto.Nombre;
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MunicipioExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+            catch (DbUpdateConcurrencyException) when (!MunicipioExists(id))
+            {             
+                 return NotFound();        
             }
 
             return NoContent();
@@ -76,8 +78,13 @@ namespace AppEstados.Controllers
         // POST: api/Municipio
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Municipio>> PostMunicipio(Municipio municipio)
+        public async Task<ActionResult<MunicipioDto>> PostMunicipio(MunicipioDto municipioDto)
         {
+            var municipio = new Municipio()
+            {
+                Nombre = municipioDto.Nombre
+            };
+
             _context.Municipios.Add(municipio);
             await _context.SaveChangesAsync();
 
@@ -100,6 +107,15 @@ namespace AppEstados.Controllers
             return NoContent();
         }
 
+        public static MunicipioDto MunicipioAdto(Municipio municipio)
+        {
+            var municipioDto = new MunicipioDto()
+            {
+                Id = municipio.Id,
+                Nombre =municipio.Nombre
+            };
+            return municipioDto;
+        }
         private bool MunicipioExists(int id)
         {
             return _context.Municipios.Any(e => e.Id == id);

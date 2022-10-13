@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jeangelg\\source\\repos\\AppEstados\\AppEstados.csproj": {}
+    "C:\\Users\\Anheru\\source\\repos\\IeecPractices\\EstadoApi\\AppEstados.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jeangelg\\source\\repos\\AppEstados\\AppEstados.csproj": {
+    "C:\\Users\\Anheru\\source\\repos\\IeecPractices\\EstadoApi\\AppEstados.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jeangelg\\source\\repos\\AppEstados\\AppEstados.csproj",
+        "projectUniqueName": "C:\\Users\\Anheru\\source\\repos\\IeecPractices\\EstadoApi\\AppEstados.csproj",
         "projectName": "AppEstados",
-        "projectPath": "C:\\Users\\Jeangelg\\source\\repos\\AppEstados\\AppEstados.csproj",
-        "packagesPath": "C:\\Users\\Jeangelg\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jeangelg\\source\\repos\\AppEstados\\obj\\",
+        "projectPath": "C:\\Users\\Anheru\\source\\repos\\IeecPractices\\EstadoApi\\AppEstados.csproj",
+        "packagesPath": "C:\\Users\\Anheru\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Anheru\\source\\repos\\IeecPractices\\EstadoApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Jeangelg\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Anheru\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -65,7 +65,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -77,7 +78,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

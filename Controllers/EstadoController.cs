@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AppEstados.Data;
 using AppEstados.Models;
 using AppEstados.DTOs;
+using Microsoft.Build.Framework;
 
 namespace AppEstados.Controllers
 {
@@ -41,35 +42,36 @@ namespace AppEstados.Controllers
                 return NotFound();
             }
 
-            return EstadoADto(estado);
+            var estadoDto = EstadoADto(estado);
+            return estadoDto;
         }
 
         // PUT: api/Estado/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEstado(int id, Estado estado)
+        public async Task<IActionResult> PutEstado(int id, EstadoDto estadoDto)
         {
-            if (id != estado.Id)
+            if (id != estadoDto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(estado).State = EntityState.Modified;
+            var estadoAmodificar = await _context.Estados.FindAsync(id);
+
+            if (estadoAmodificar == null)
+            {
+                return BadRequest();
+            }
+
+            estadoAmodificar.Nombre = estadoDto.Nombre;
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException) when (!EstadoExists(id))
             {
-                if (!EstadoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -81,28 +83,31 @@ namespace AppEstados.Controllers
         public async Task<ActionResult<EstadoDto>> PostEstado(EstadoDto estadoDto)
         {
 
-            var estado = new Estado
+            var estado = new Estado()
             {
                 Nombre = estadoDto.Nombre
             };
 
-            _context.Estados.Add(estado);
+            _context.Estados.AddRange(estado);
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetEstado", new { id = estado.Id }, estado);
         }
 
+    
+
         // DELETE: api/Estado/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEstado(int id)
         {
-            var estado = await _context.Estados.FindAsync(id);
-            if (estado == null)
+            var estadoAborrar = await _context.Estados.FindAsync(id);
+            if (estadoAborrar == null)
             {
                 return NotFound();
             }
 
-            _context.Estados.Remove(estado);
+            _context.Estados.Remove(estadoAborrar);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -110,16 +115,19 @@ namespace AppEstados.Controllers
 
         private static EstadoDto EstadoADto(Estado estado)
         {
-            return new EstadoDto {
+            return new EstadoDto
+            {
                 Id = estado.Id,
                 Nombre = estado.Nombre
             };
         }
-         
+
 
         private bool EstadoExists(int id)
         {
             return _context.Estados.Any(e => e.Id == id);
         }
+
+
     }
 }
